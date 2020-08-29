@@ -7,9 +7,11 @@ def is_question(text):
             return True
     return False
 
+"""
 text = "我想你是逼"
 
 if is_question(text):
     print("True")
 else:
     print("False")
+"""

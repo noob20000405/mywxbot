@@ -4,6 +4,7 @@ import config
 # import command
 import globvar
 import functions as f
+import regex
 
 bot = Bot(cache_path=True)
 
@@ -41,11 +42,15 @@ def friends_msg(msg):
         # print(msg.receive_time)
         message = msg.sender.name + ' : ' + msg.text
         print(message)
+
         f.add_item(globvar.dict_msg, globvar.msg_id, name, time, text)
         print('id : ', globvar.msg_id)
 
+        if regex.is_question(text):
+            f.add_question(globvar.dict_qs, globvar.msg_id, name, time, text)
+
         localtime = f.get_localtime()
-        f.clear_dict(localtime, config.INITIALIZE_TIME, globvar.dict_msg)
+        f.clear_dict(localtime, config.INITIALIZE_TIME, globvar.dict_msg, globvar.dict_qs)
 
 @bot.register(myGroup)
 def group_msg(msg):
@@ -58,11 +63,15 @@ def group_msg(msg):
         # print(msg.receive_time)
         message = msg.member.name + ' : ' + msg.text
         print(message)
+
         f.add_item(globvar.dict_msg, globvar.msg_id, name, time, text)
         print('id : ', globvar.msg_id)
 
+        if regex.is_question(text):
+            f.add_question(globvar.dict_qs, globvar.msg_id, name, time, text)
+
         localtime = f.get_localtime()
-        f.clear_dict(localtime, config.INITIALIZE_TIME, globvar.dict_msg)
+        f.clear_dict(localtime, config.INITIALIZE_TIME, globvar.dict_msg, globvar.dict_qs)
 
 @bot.register(chats=master)
 def do_command(msg):
