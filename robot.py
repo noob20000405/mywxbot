@@ -11,11 +11,18 @@ bot = Bot(cache_path=True)
 bot.file_helper.send('hello !!')
 
 listen_group = ensure_one(bot.groups().search('索邦大学校友总群'))
-listen_friend = bot.friends().search('')[0]
+# listen_friend = bot.friends().search('')[0]
 
 myFriend = bot.friends()
 myGroup = bot.groups()
-master = bot.file_helper
+master = bot.friends()
+
+if config.SYNC_MSG:
+    sync_groups = bot.groups().search(config.SYNC_GROUP_NAME)
+    sync_groups[0].update_group(members_details=True)
+    sync_groups[1].update_group(members_details=True)
+else:
+    sync_groups = bot.file_helper
 
 """
 if listen_group:
@@ -31,7 +38,7 @@ if listen_group:
             sex_dict['unknown'] += 1
     print(sex_dict)
 """
-@bot.register(myFriend)
+@bot.register(myFriend) # for test
 def friends_msg(msg):
     if config.LISTEN_FRIENDS:
         print("From a friend : ")
@@ -43,14 +50,14 @@ def friends_msg(msg):
         message = msg.sender.name + ' : ' + msg.text
         print(message)
 
-        f.add_item(globvar.dict_msg, globvar.msg_id, name, time, text)
+        globvar.dict_msg, globvar.msg_id = f.add_item(globvar.dict_msg, globvar.msg_id, name, time, text)
         print('id : ', globvar.msg_id)
 
         if regex.is_question(text):
-            f.add_question(globvar.dict_qs, globvar.msg_id, name, time, text)
+            globvar.dict_qs = f.add_question(globvar.dict_qs, globvar.msg_id, name, time, text)
 
         localtime = f.get_localtime()
-        f.clear_dict(localtime, config.INITIALIZE_TIME, globvar.dict_msg, globvar.dict_qs)
+        globvar.dict_msg, globvar.dict_qs = f.clear_dict(localtime, config.INITIALIZE_TIME, globvar.dict_msg, globvar.dict_qs)
 
 @bot.register(myGroup)
 def group_msg(msg):
@@ -64,14 +71,23 @@ def group_msg(msg):
         message = msg.member.name + ' : ' + msg.text
         print(message)
 
-        f.add_item(globvar.dict_msg, globvar.msg_id, name, time, text)
+        globvar.dict_msg, globvar.msg_id = f.add_item(globvar.dict_msg, globvar.msg_id, name, time, text)
         print('id : ', globvar.msg_id)
 
         if regex.is_question(text):
-            f.add_question(globvar.dict_qs, globvar.msg_id, name, time, text)
+            globvar.dict_qs = f.add_question(globvar.dict_qs, globvar.msg_id, name, time, text)
 
         localtime = f.get_localtime()
-        f.clear_dict(localtime, config.INITIALIZE_TIME, globvar.dict_msg, globvar.dict_qs)
+        globvar.dict_msg, globvar.dict_qs = f.clear_dict(localtime, config.INITIALIZE_TIME, globvar.dict_msg,
+                                                         globvar.dict_qs)
+
+        # test
+        print(globvar.dict_msg)
+
+@bot.register(sync_groups, except_self=False)
+def sync_my_groups(msg):
+    if config.SYNC_MSG:
+        sync_message_in_groups(msg, sync_groups)
 
 @bot.register(chats=master)
 def do_command(msg):
