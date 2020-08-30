@@ -1,4 +1,5 @@
 import time
+import config
 
 def add_item(dict, id, name, time, text):
     dict[id] = {}
@@ -20,3 +21,8 @@ def add_question(dict, id, name, time, text):
     dict[id]["name"] = name
     dict[id]["time"] = time
     dict[id]["text"] = text
+
+def show_next_msgs(dict, id):
+    for i in range(config.NUMBER_MSGS):
+        index = str(int(id) + i)
+        print(dict[index]['name'], ' : ', dict[index]['text'])

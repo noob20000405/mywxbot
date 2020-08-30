@@ -1,7 +1,7 @@
 import re
 
 def is_question(text):
-    word_list = ['请问', '问', '吗', '么', '\?', '\？']
+    word_list = ['请问', '问', '吗', '么', '啥', '哪', '\?', '\？']
     for word in word_list:
         if re.search(word, text) != None:
             return True

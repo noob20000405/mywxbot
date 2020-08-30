@@ -1,7 +1,7 @@
 from wxpy import *
 import MySQLdb
 import config
-# import command
+import command
 import globvar
 import functions as f
 import regex
@@ -75,11 +75,6 @@ def group_msg(msg):
 
 @bot.register(chats=master)
 def do_command(msg):
-    print("history : ")
-    if 's' == msg.text:
-        for key, content in globvar.dict_msg.items():
-            print("ID: ", key)
-            for value in content.values():
-                print(value)
+    command.do_command(msg, globvar.dict_qs, globvar.dict_msg)
 
 embed()
