@@ -15,7 +15,7 @@ listen_group = ensure_one(bot.groups().search('索邦大学校友总群'))
 
 myFriend = bot.friends()
 myGroup = bot.groups()
-master = bot.friends()
+master = ensure_one(bot.friends().search(config.MASTER))
 
 if config.SYNC_MSG:
     sync_groups = bot.groups().search(config.SYNC_GROUP_NAME)
@@ -91,6 +91,6 @@ def sync_my_groups(msg):
 
 @bot.register(chats=master)
 def do_command(msg):
-    command.do_command(msg, globvar.dict_qs, globvar.dict_msg)
+    command.do_command(master, msg, globvar.dict_qs, globvar.dict_msg)
 
 embed()

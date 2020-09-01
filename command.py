@@ -1,15 +1,12 @@
 import config
 import functions as f
 
-def do_command(msg, dict_qs, dict_msg):
+def do_command(master, msg, dict_qs, dict_msg):
     if 'qs' == msg.text:
         print("Questions : ")
         config.SHOW_QS = True
-        for key, content in dict_qs.items():
-            print("ID: ", key)
-            for value in content.values():
-                print(value)
+        master.send(f.dict_to_msg(dict_qs))
 
-    if 'next' == msg and config.SHOW_QS:
+    if msg.isdigit() and config.SHOW_QS:
         id = msg
-        f.show_next_msgs(dict_msg, id)
+        master.send(f.show_next_msgs(dict_msg, id))

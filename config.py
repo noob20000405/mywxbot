@@ -9,3 +9,5 @@ SHOW_QS = False
 
 SYNC_MSG = False
 SYNC_GROUP_NAME = '15'
+
+MASTER = 'none'

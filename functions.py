@@ -26,6 +26,25 @@ def add_question(dict, id, name, time, text):
     return dict
 
 def show_next_msgs(dict, id):
+    msg = ''
     for i in range(config.NUMBER_MSGS):
-        index = str(int(id) + i)
-        print(dict[index]['name'], ' : ', dict[index]['text'])
+        index = int(id) + i
+        msg += dict[index]['name']
+        msg += ' : '
+        msg += dict[index]['text']
+        msg += '\n'
+    return msg
+
+def dict_to_msg(dict):
+    msg = ''
+    for key, content in dict.items():
+        msg += str(key)
+        msg += ' -> '
+        for k, value in content.items():
+            if k == 'name':
+                msg += value
+                msg += ' : '
+            if k == 'text':
+                msg += value
+        msg += '\n'
+    return msg
